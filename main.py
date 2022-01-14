@@ -67,3 +67,12 @@ for M in (128, 64, 192):
     plt.title(f'M={M}')
     #plt.show()
 
+def OutputFuzzySet(x, f, M, thres):
+    x = np.array(x)
+    result = f(x, M)
+    result[result > thres] = thres
+    return result
+
+
+def AggregateFuzzySets(fuzzy_sets):
+    return np.max(np.stack(fuzzy_sets), axis=0)
