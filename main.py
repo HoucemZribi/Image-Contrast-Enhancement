@@ -76,3 +76,23 @@ def OutputFuzzySet(x, f, M, thres):
 
 def AggregateFuzzySets(fuzzy_sets):
     return np.max(np.stack(fuzzy_sets), axis=0)
+
+def Infer(i, M, get_fuzzy_set=False):
+    # Calculate degree of membership for each class
+    VD = VeryDark(i, M)
+    Da = Dark(i, M)
+    SD = SlightlyDark(i, M)
+    SB = SlightlyBright(i, M)
+    Br = Bright(i, M)
+    VB = VeryBright(i, M)
+
+    # Fuzzy Inference:
+    x = np.arange(-50, 306)
+    Inferences = (
+        OutputFuzzySet(x, ExtremelyDark, M, VD),
+        OutputFuzzySet(x, VeryDark, M, Da),
+        OutputFuzzySet(x, Dark, M, SD),
+        OutputFuzzySet(x, Bright, M, SB),
+        OutputFuzzySet(x, VeryBright, M, Br),
+        OutputFuzzySet(x, ExtremelyBright, M, VB)
+    )
