@@ -96,3 +96,27 @@ def Infer(i, M, get_fuzzy_set=False):
         OutputFuzzySet(x, VeryBright, M, Br),
         OutputFuzzySet(x, ExtremelyBright, M, VB)
     )
+        # Calculate AggregatedFuzzySet:
+    fuzzy_output = AggregateFuzzySets(Inferences)
+
+    # Calculate crisp value of centroid
+    if get_fuzzy_set:
+        return np.average(x, weights=fuzzy_output), fuzzy_output
+    return np.average(x, weights=fuzzy_output)
+for pixel in (64, 96, 160, 192):
+    M = 128
+    x = np.arange(-50, 306)
+    centroid, output_fuzzy_set = Infer(np.array([pixel]), M, get_fuzzy_set=True)
+    plt.figure(figsize=(20, 5))
+    plt.plot(x, output_fuzzy_set, 'k-',label='FuzzySet', linewidth=2)
+    plt.plot((M, M), (0, 1), 'm--', label='M', linewidth=2)
+    plt.plot((pixel, pixel), (0, 1), 'g--', label='Input', linewidth=2)
+    plt.plot((centroid, centroid), (0, 1), 'r--', label='Output', linewidth=2)
+    plt.fill_between(x, np.zeros(356), output_fuzzy_set, color=(.9, .9, .9, .9))
+    plt.legend()
+    plt.xlim(-50, 305)
+    plt.ylim(0.0, 1.01)
+    plt.xlabel('Output pixel intensity')
+    plt.ylabel('Degree of membership')
+    plt.title(f'input_pixel_intensity = {pixel}\nM = {M}')
+   # plt.show()
